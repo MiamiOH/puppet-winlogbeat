@@ -11,18 +11,10 @@ class winlogbeat::config {
     'runoptions' => $winlogbeat::run_options,
   }
 
-  case $::kernel {
-    'Windows' : {
-      file {'winlogbeat.yml':
-        ensure  => file,
-        path    => $winlogbeat::config_file,
-        content => template($winlogbeat::conf_template),
-        notify  => Service['winlogbeat'],
-      }
-    } # end Windows
-
-    default : {
-      fail($winlogbeat::kernel_fail_message)
-    }
+  file { 'winlogbeat.yml':
+    ensure  => file,
+    path    => $winlogbeat::config_file,
+    content => template($winlogbeat::conf_template),
+    notify  => Service['winlogbeat'],
   }
 }

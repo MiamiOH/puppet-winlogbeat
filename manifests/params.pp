@@ -1,6 +1,5 @@
 # winlogbeat::params
 class winlogbeat::params {
-  # $package_version = '1.3.1'
   $service_ensure = running
   $service_enable = true
   $outputs        = {}
@@ -15,10 +14,7 @@ class winlogbeat::params {
   }
 
   case $::kernel {
-    'Windows' : {
-      # $config_file      = 'C:/Program Files/Winlogbeat/winlogbeat.yml'
-      # $download_url     = "https://download.elastic.co/beats/winlogbeat/winlogbeat-${winlogbeat_pkg_version}-windows-x86_64.zip"
-      # $install_dir      = 'C:/Program Files'
+    'windows' : {
       $winlogbeat_pkg_name    = 'winlogbeat'
       $winlogbeat_pkg_ensure  = '5.4.0'
       $winlogbeat_pkg_version = $winlogbeat_pkg_ensure
@@ -31,7 +27,7 @@ class winlogbeat::params {
     }
 
     default : {
-      fail($winlogbeat::kernel_fail_message)
+      fail("${::kernel} is not supported by winlogbeat.")
     }
   }
 }

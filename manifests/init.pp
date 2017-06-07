@@ -13,10 +13,7 @@
 # }
 #
 # @param conf_template [String] The configuration template to use to generate the main winlogbeat.yml config file
-# @param download_url [String] The URL of the zip file that should be downloaded to install winlogbeat
-# @param install_dir [String] Where winlogbeat should be installed
 # @param outputs [Hash] Will be converted to YAML for the required outputs section of the winlogbeat config
-# @param package_verion [String] The version parameter for the winlogbeat package
 # @param registry_file [String] The registry file used to store positions, absolute or relative to working directory (default .winlogbeat.yml)
 # @param service_enable [String] The enable parameter on the winlogbeat service (default: true)
 # @param service_ensure [String] The ensure parameter on the winlogbeat service (default: running)
@@ -29,8 +26,6 @@
 class winlogbeat (
   $conf_template         = $winlogbeat::params::conf_template,
   $config_file           = $winlogbeat::params::config_file,
-  # $download_url          = $winlogbeat::params::download_url,
-  # $install_dir           = $winlogbeat::params::install_dir,
   $outputs               = $winlogbeat::params::outputs,
   $registry_file         = $winlogbeat::params::registry_file,
   $service_enable        = $winlogbeat::params::service_enable,
@@ -46,8 +41,6 @@ class winlogbeat (
   $winlogbeat_source     = $winlogbeat::params::winlogbeat_pkg_source,
 ) inherits winlogbeat::params {
 
-  $kernel_fail_message = "${::kernel} is not supported by winlogbeat."
-
   validate_bool($event_logs_merge)
 
   if $event_logs_merge {
@@ -56,17 +49,12 @@ class winlogbeat (
     $event_logs_final = $event_logs
   }
 
-  # if $config_file != $winlogbeat::params::config_file {
-  #   warning('You\'ve specified a non-standard config_file location - winlogbeat may fail to start unless you\'re doing something to fix this')
-  # }
-
   validate_hash($outputs, $logging, $event_logs_final)
   validate_string($registry_file, $winlogbeat_pkg_ensure)
 
   anchor { 'winlogbeat::begin': } ->
   class { 'winlogbeat::install': } ->
-  class { 'winlogbeat::config': } ->
+  class { 'winlogbeat::config': } ~>
   class { 'winlogbeat::service': } ->
   anchor { 'winlogbeat::end': }
-
 }
