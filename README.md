@@ -30,13 +30,11 @@ with required configurations.
 ### Setup Requirements
 
 The `winlogbeat` module depends on:
-* [`puppetlabs/powershell`](https://forge.puppetlabs.com/puppetlabs/powershell)
-* [`puppetlabs/stdlib`](https://forge.puppetlabs.com/puppetlabs/stdlib)
-* [`lwf/remote_file`](https://forge.puppet.com/lwf/remote_file)
+* [`puppetlabs/chocolatey`](https://forge.puppet.com/puppetlabs/chocolatey)
 
 ### Beginning with winlogbeat
 
-`winlogbeat` can be installed with `puppet module install skynetsolutions-winlogbeat` (or with r10k, librarian-puppet, etc.)
+`winlogbeat` can be installed with `puppet module install MiamiOH-winlogbeat` (or with r10k, librarian-puppet, etc.)
 
 The only required parameter, other than which event logs to ship, is the `outputs` parameter.
 
