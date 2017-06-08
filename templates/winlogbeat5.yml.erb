@@ -11,14 +11,45 @@ winlogbeat.metrics:
 
 <%- if @winlogbeat_config['winlogbeat']['event_logs'].length > 0 -%>
 winlogbeat.event_logs:
-<%- @winlogbeat_config['winlogbeat']['event_logs'].each do |event_log| -%>
-  <%- if event_log['name'] != nil -%>
-  - name: "<%= event_log['name'] %>"
-    <%- if event_log['ignore_older'] != nil -%>
-    ignore_older: <%= event_log['ignore_older'] %>
+  <%- @winlogbeat_config['winlogbeat']['event_logs'].each_pair do |name, options| -%>
+  - name: "<%= options['name'] || name %>"
+    <%- if options['ignore_older'] != nil -%>
+    ignore_older: <%= options['ignore_older'] %>
+    <%- end -%>
+    <%- if options['forwarded'] != nil -%>
+    forwarded: <%= options['forwarded'] %>
+    <%- end -%>
+    <%- if options['event_id'] != nil -%>
+    event_id: <%= options['event_id'] %>
+    <%- end -%>
+    <%- if options['level'] != nil -%>
+    level: <%= options['level'] %>
+    <%- end -%>
+    <%- if options['provider'] != nil -%>
+    provider:
+    <%- options['provider'].each do |p| -%>
+      - <%= p %>
+    <%- end -%>
+    <%- end -%>
+    <%- if options['include_xml'] != nil -%>
+    include_xml: <%= options['include_xml'] %>
+    <%- end -%>
+    <%- if options['tags'] != nil -%>
+    tags:
+    <%- options['tags'].each do |tag| -%>
+      - <%= tag %>
+    <%- end -%>
+    <%- end -%>
+    <%- if options['fields'] != nil -%>
+    fields:
+      <%- options['fields'].each_pair do |k, v| -%>
+      <%= k %>: <%= v %>
+      <%- end -%>
+    <%- end -%>
+    <%- if options['fields_under_root'] != nil -%>
+    fields_under_root: <%= options['fields_under_root'] %>
     <%- end -%>
   <%- end -%>
-<%- end -%>
 <%- end -%>
 
 #================================ General ======================================

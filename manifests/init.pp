@@ -44,7 +44,7 @@ class winlogbeat (
   $fields            = $winlogbeat::params::fields,
   $fields_under_root = $winlogbeat::params::fields_under_root,
   $metrics           = undef,
-  $event_logs        = [],
+  $event_logs        = {},
   $event_logs_merge  = false,
 ) inherits winlogbeat::params {
 
@@ -64,13 +64,12 @@ class winlogbeat (
   }
 
   if $event_logs_merge {
-    $event_logs_final = hiera_array('winlogbeat::event_logs', $event_logs)
+    $event_logs_final = hiera_hash('winlogbeat::event_logs', $event_logs)
   } else {
     $event_logs_final = $event_logs
   }
 
-  validate_hash($outputs, $logging)
-  validate_array($event_logs_final)
+  validate_hash($outputs, $logging, $event_logs_final)
   validate_string($registry_file, $package_ensure)
 
   anchor { 'winlogbeat::begin': } ->
