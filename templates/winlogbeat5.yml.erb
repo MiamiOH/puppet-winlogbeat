@@ -1,12 +1,10 @@
-winlogbeat_config#======================= Winlogbeat specific options ==========================
+#======================= Winlogbeat specific options ==========================
 
 winlogbeat.registry_file: <%= @winlogbeat_config['winlogbeat']['registry_file'] %>
 
-<%- if @winlogbeat_config['winlogbeat']['metrics'] != nil -%>
+<%- if @winlogbeat_config['winlogbeat']['metrics'] != nil && @winlogbeat_config['winlogbeat']['metrics']['bindaddress'] != nil -%>
 winlogbeat.metrics:
-  <%- if @winlogbeat_config['winlogbeat']['metrics']['bindaddress'] != nil -%>
   bindaddress: <%= @winlogbeat_config['winlogbeat']['metrics']['bindaddress'] %>
-  <%- end -%>
 <%- end -%>
 
 <%- if @winlogbeat_config['winlogbeat']['event_logs'].length > 0 -%>
